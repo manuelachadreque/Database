@@ -1,0 +1,46 @@
+
+-- A REMINDER OF NORMAL SUBQUERIES
+--CREATING A CORRELATED SUBQUERY
+---SUSING TABLE ALIAS
+---HOW DOES A CORRELATED SUBQUEY WORK
+
+USE MOVIES
+
+SELECT * FROM tblFilm
+
+--UNCORRELATED SUBQUERY OR NORMAL SUBQUERY 
+SELECT 
+	C.CountryName
+	,F.FilmName
+	,F.FilmRunTimeMinutes
+FROM tblFilm AS F INNER JOIN 
+tblCountry AS C ON C.CountryID=F.FilmCountryID
+WHERE
+	F.FilmRunTimeMinutes=
+	(
+		SELECT 
+			MAX(FILMRUNTIMEMINUTES)
+		FROM tblFilm
+		)
+	
+--CORRELATED SUBQUERY OR NORMAL SUBQUERY 
+SELECT 
+	YEAR(F.FilmReleaseDate) as y
+	,F.FilmName
+	,F.FilmRunTimeMinutes
+FROM tblFilm AS f INNER JOIN 
+tblCountry AS c ON c.CountryID=f.FilmCountryID
+WHERE
+	F.FilmRunTimeMinutes>
+	(
+		SELECT 
+			AVG(FILMRUNTIMEMINUTES)
+		FROM tblFilm AS g
+		WHERE YEAR(g.FilmReleaseDate)=YEAR(f.FilmReleaseDate)
+		)
+ORDER BY 
+	y
+	
+
+
+
